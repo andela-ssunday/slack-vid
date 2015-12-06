@@ -15,6 +15,9 @@ module.exports = (robot) ->
   robot.respond /new/i, (res) ->
     rand = new Date().getTime();
     res.send "https://plus.google.com/hangouts/_/andela.com/call"+rand
+  robot.respond /kay/i, (res) ->
+    rand = new Date().getTime();
+    res.send "/dm kay https://plus.google.com/hangouts/_/andela.com/call"+rand
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
