@@ -15,10 +15,13 @@ module.exports = (robot) ->
     res.send "```veed help- Display help```"
     res.send "```veed new- Creates a new hangout link ```"
 
-  robot.respond /new [a-zA-Z]*/i, (res) ->
+  robot.respond /new/i, (res) ->
     rand = new Date().getTime();
     list = formatText res.envelope.message.rawText;
-    obj = new Object();
+    console.log res
+    # if res.envelope.room != 'testing'
+    if list.indexOf(res.envelope.room) == -1
+      list.push(res.envelope.room);
     if list.length > 0
       async.whilst (->
         list.length > 0
@@ -31,8 +34,6 @@ module.exports = (robot) ->
       ), (err, n) ->
         #do nothing
         return
-    else
-      res.send 'https://plus.google.com/hangouts/_/andela.com/call'+rand
 
   formatText = (text) ->
     textArray = text.split(' ')
