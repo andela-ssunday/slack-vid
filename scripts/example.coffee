@@ -8,16 +8,38 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
+async = require('async');
+
 module.exports = (robot) ->
   robot.respond /help/i, (res) ->
     res.send "```veed help- Display help```"
     res.send "```veed new- Creates a new hangout link ```"
-  robot.respond /new/i, (res) ->
+
+  robot.respond /new [a-zA-Z]*/i, (res) ->
     rand = new Date().getTime();
-    res.send "https://plus.google.com/hangouts/_/andela.com/call"+rand
-  robot.respond /kay/i, (res) ->
-    rand = new Date().getTime();
-    res.send "/dm kay https://plus.google.com/hangouts/_/andela.com/call"+rand
+    list = formatText res.envelope.message.rawText;
+    obj = new Object();
+    if list.length > 0
+      async.whilst (->
+        list.length > 0
+      ), ((callback) ->
+        e = list.pop()
+        res.envelope.room = e
+        res.send 'https://plus.google.com/hangouts/_/andela.com/call' + rand
+        setTimeout callback, 100
+        return
+      ), (err, n) ->
+        #do nothing
+        return
+    else
+      res.send 'https://plus.google.com/hangouts/_/andela.com/call'+rand
+
+  formatText = (text) ->
+    textArray = text.split(' ')
+    start = textArray.indexOf('new') + 1
+    textArray.slice start, textArray.length
+
+
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
