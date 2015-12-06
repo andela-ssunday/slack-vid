@@ -13,7 +13,7 @@ require('dotenv').load();
 
 module.exports = (robot) ->
   robot.respond /help/i, (res) ->
-    res.send "```help- Display help \nnew- Creates a new hangout link ```"
+    res.send "```help- Display help \nnew- Creates a new hangout link```"
 
   robot.respond /new/i, (res) ->
     rand = new Date().getTime();
