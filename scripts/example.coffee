@@ -18,7 +18,7 @@ module.exports = (robot) ->
   robot.respond /new/i, (res) ->
     sender = res.envelope.user.name
     rand = new Date().getTime();
-    list = formatText res.envelope.message.rawText;
+    list = formatText res.envelope.message.text;
     if list.indexOf(res.envelope.room) == -1
       list.push(res.envelope.room);
     if list.length > 0
@@ -27,6 +27,7 @@ module.exports = (robot) ->
       ), ((callback) ->
         e = list.pop()
         res.envelope.room = e
+        console.log res.envelope
         res.send "@#{sender} just sent you a google hangout invite\nhttps://plus.google.com/hangouts/_/#{process.env.ORG_NAME}/call#{rand}"
         setTimeout callback, 100
         return
@@ -35,6 +36,8 @@ module.exports = (robot) ->
         return
 
   formatText = (text) ->
+    text = text.replace /@/g, ""
+    console.log text, "text"
     textArray = text.split(' ')
     start = textArray.indexOf('new') + 1
     textArray.slice start, textArray.length
