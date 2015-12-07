@@ -16,6 +16,7 @@ module.exports = (robot) ->
     res.send "```help- Display help \nnew- Creates a new hangout link```"
 
   robot.respond /new/i, (res) ->
+    sender = res.envelope.user.name
     rand = new Date().getTime();
     list = formatText res.envelope.message.rawText;
     if list.indexOf(res.envelope.room) == -1
@@ -26,7 +27,7 @@ module.exports = (robot) ->
       ), ((callback) ->
         e = list.pop()
         res.envelope.room = e
-        res.send 'https://plus.google.com/hangouts/_/'+ process.env.ORG_NAME + '/call' + rand
+        res.send "@#{sender} just sent you a google hangout invite\nhttps://plus.google.com/hangouts/_/#{process.env.ORG_NAME}/call#{rand}"
         setTimeout callback, 100
         return
       ), (err, n) ->
