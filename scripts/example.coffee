@@ -10,6 +10,7 @@
 
 async = require('async');
 require('dotenv').load();
+Firebase = require('firebase');
 
 module.exports = (robot) ->
   robot.respond /help/i, (res) ->
@@ -17,6 +18,7 @@ module.exports = (robot) ->
 
   robot.respond /new/i, (res) ->
     sender = res.envelope.user.name
+    logger(sender)
     rand = new Date().getTime();
     list = formatText res.envelope.message.text;
     if list.indexOf(res.envelope.room) == -1
@@ -43,3 +45,8 @@ module.exports = (robot) ->
     textArray = text.split(' ')
     start = textArray.indexOf('new') + 1
     textArray.slice start, textArray.length
+
+ logger = (name) ->
+   link = 'https://slack-veed.firebaseio.com/data' ;
+   myRootRef = new Firebase(link);
+   myRootRef.push({user: name, time: (new Date()).toString()});
