@@ -18,7 +18,7 @@ module.exports = (robot) ->
 
   robot.respond /new/i, (res) ->
     sender = res.envelope.user.name
-    email = res.envelope.user.email
+    email = res.envelope.user.email_address
     logger(sender, email)
     list = formatText res.envelope.message.text;
     if list.indexOf(res.envelope.room) == -1
@@ -49,4 +49,4 @@ module.exports = (robot) ->
  logger = (name, email) ->
    link = 'https://slack-veed.firebaseio.com/data' ;
    myRootRef = new Firebase(link);
-   myRootRef.push({email: email user: name, time: (new Date()).toString()});
+   myRootRef.push({email: email, user: name, time: (new Date()).toString()});
