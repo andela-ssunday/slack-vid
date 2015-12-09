@@ -18,8 +18,8 @@ module.exports = (robot) ->
 
   robot.respond /new/i, (res) ->
     sender = res.envelope.user.name
-    logger(sender)
-    rand = new Date().getTime();
+    email = res.envelope.user.email
+    logger(sender, email)
     list = formatText res.envelope.message.text;
     if list.indexOf(res.envelope.room) == -1
       list.push(res.envelope.room);
@@ -33,7 +33,7 @@ module.exports = (robot) ->
         e = list.pop()
         res.envelope.room = e
         message = if sender == e  then "Below is the google hangout link, #{feedback}\n" else "`@#{sender} just sent you a google hangout invite`\n"
-        res.send "#{message}https://plus.google.com/hangouts/_/#{process.env.ORG_NAME}/call#{rand}"
+        res.send "#{message}https://plus.google.com/hangouts/_/#{process.env.ORG_NAME}/#{sender}"
         setTimeout callback, 100
         return
       ), (err, n) ->
@@ -46,7 +46,7 @@ module.exports = (robot) ->
     start = textArray.indexOf('new') + 1
     textArray.slice start, textArray.length
 
- logger = (name) ->
+ logger = (name, email) ->
    link = 'https://slack-veed.firebaseio.com/data' ;
    myRootRef = new Firebase(link);
-   myRootRef.push({user: name, time: (new Date()).toString()});
+   myRootRef.push({email: email user: name, time: (new Date()).toString()});
